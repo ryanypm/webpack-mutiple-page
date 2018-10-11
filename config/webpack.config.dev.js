@@ -17,7 +17,7 @@ const webpackDev = {
         inline: true, // 实时重载的脚本被插入到你的包(bundle)中，并且构建消息将会出现在浏览器控制台
         hot: true, // 热更新
         host: '0.0.0.0',
-        index: '/pages/index/index.html', // 默认启动页
+        index: 'index.html', // 默认启动页
         useLocalIp: true, // 使用本机ip打开server, 而不是localhost
     },
     plugins: [

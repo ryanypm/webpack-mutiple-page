@@ -96,14 +96,6 @@ htmlDirs.forEach((page) => {
     HTMLPlugins.push(htmlPlugin);
 });
 
-const postcssPlugins = () => {
-    let plugins = [
-        require('autoprefixer')(),
-    ];
-
-    return plugins;
-}
-
 module.exports = {
     entry: Entries,
     output: {
@@ -170,9 +162,6 @@ module.exports = {
                 fallback: 'style-loader',
                 use: [ 'css-loader', {
                     loader: 'postcss-loader',
-                    options: {
-                        plugins: postcssPlugins,
-                    },
                 }]
             })
         }, {
@@ -183,9 +172,6 @@ module.exports = {
                 fallback: 'style-loader',
                 use: [ 'css-loader',{
                     loader: 'postcss-loader',
-                    options: {
-                        plugins: postcssPlugins,
-                    },
                 }, 'sass-loader' ]
             })
         }]
