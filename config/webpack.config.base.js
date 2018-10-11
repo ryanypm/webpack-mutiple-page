@@ -57,10 +57,9 @@ const getFileNameList = (oPath) => {
 const htmlDirs = getFileNameList(config.HTML_PATH);
 let HTMLPlugins = []; // 保存HTMLWebpackPlugin实例
 let Entries = { // 保存入口列表
+    // 公共模块
     vendor: [
         'core-js/shim', // es5
-        'whatwg-fetch', // 网络请求库
-        path.resolve(config.SRC_PATH, './utils/common'),
     ]
 };
 
@@ -97,6 +96,14 @@ htmlDirs.forEach((page) => {
     HTMLPlugins.push(htmlPlugin);
 });
 
+const postcssPlugins = () => {
+    let plugins = [
+        require('autoprefixer')(),
+    ];
+
+    return plugins;
+}
+
 module.exports = {
     entry: Entries,
     output: {
@@ -104,14 +111,31 @@ module.exports = {
     },
     resolve: {
         alias: {
-            'vue': 'vue/dist/vue.js'
+            'vue': 'vue/dist/vue.js',
+            'assets': path.resolve(__dirname, '../src/assets'),
         }
     },
     module: {
         rules: [{
             test: /\.vue$/,
             loader: 'vue-loader',
-            options: {}
+            options: {
+                loaders: {
+                    'scss': [
+                        'vue-style-loader',
+                        'css-loader',
+                        'sass-loader'
+                    ],
+                    'sass': [
+                        'vue-style-loader',
+                        'css-loader',
+                        'sass-loader?indentedSyntax'
+                    ],
+                    'html': [
+                        'html-loader'
+                    ],
+                }
+            }
         }, {
             test: /\.(png|jpg|gif|svg|jpge|mp3|woff|woff2|eot|ttf|otf)$/,
             include: [config.SRC_PATH],
@@ -147,9 +171,7 @@ module.exports = {
                 use: [ 'css-loader', {
                     loader: 'postcss-loader',
                     options: {
-                        plugins: () => [
-                            require('autoprefixer')(),
-                        ],
+                        plugins: postcssPlugins,
                     },
                 }]
             })
@@ -162,9 +184,7 @@ module.exports = {
                 use: [ 'css-loader',{
                     loader: 'postcss-loader',
                     options: {
-                        plugins: () => [
-                            require('autoprefixer')(),
-                        ],
+                        plugins: postcssPlugins,
                     },
                 }, 'sass-loader' ]
             })
