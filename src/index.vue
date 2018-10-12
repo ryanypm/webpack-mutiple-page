@@ -1,5 +1,5 @@
 <template>
-    <div>的地方地方大幅度发</div>
+    <div>hello word</div>
 </template>
 
 <script>
@@ -8,9 +8,9 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
     body{
-        background: #000;
+        background: #fff;
         display: flex;
         transform: translate(50%);
     }

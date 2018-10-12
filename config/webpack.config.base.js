@@ -96,6 +96,34 @@ htmlDirs.forEach((page) => {
     HTMLPlugins.push(htmlPlugin);
 });
 
+const cssLoader = isProd ? cssExtracter.extract({
+    fallback: 'style-loader',
+    use: [ 'css-loader', {
+        loader: 'postcss-loader',
+    }]
+}) : [
+    'style-loader',
+    'css-loader',
+    'postcss-loader',
+];
+
+const sCssLoader = isProd ? sassExtracter.extract({
+    fallback: 'style-loader',
+    use: [ 'css-loader',{
+        loader: 'postcss-loader',
+    }, 'sass-loader' ]
+}) : [
+    'style-loader',
+    'css-loader',
+    'postcss-loader',
+    'sass-loader',
+];
+
+const _plugins = isProd ? [
+    cssExtracter,
+    sassExtracter,
+] : [];
+
 module.exports = {
     entry: Entries,
     output: {
@@ -158,27 +186,16 @@ module.exports = {
             test: /\.css$/,
             include: [config.SRC_PATH],
             exclude: [config.NODE_MODULES_PATH],
-            use: cssExtracter.extract({
-                fallback: 'style-loader',
-                use: [ 'css-loader', {
-                    loader: 'postcss-loader',
-                }]
-            })
+            use: cssLoader
         }, {
             test: /\.scss$/,
             include: [config.SRC_PATH],
             exclude: [config.NODE_MODULES_PATH],
-            use: sassExtracter.extract({
-                fallback: 'style-loader',
-                use: [ 'css-loader',{
-                    loader: 'postcss-loader',
-                }, 'sass-loader' ]
-            })
+            use: sCssLoader
         }]
     },
     plugins: [
-        cssExtracter,
-        sassExtracter,
+        ..._plugins,
         new VueLoaderPlugin(),
         new webpack.ProvidePlugin({
             $: 'jquery',
